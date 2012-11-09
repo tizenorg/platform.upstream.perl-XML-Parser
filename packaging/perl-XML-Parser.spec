@@ -1,54 +1,69 @@
 Name:           perl-XML-Parser
-Version:        2.36
-Release:        3
-Summary:        A low level Perl module for parsing XML either via trees or streaming
-
-License:        GPL+ or Artistic
-Url:            http://search.cpan.org/dist/XML-Parser/
-Group:          Development/Libraries
-Source0:        http://www.cpan.org/authors/id/M/MS/MSERGEANT/XML-Parser-%{version}.tar.gz
-
-BuildRequires:  expat-devel
-BuildRequires:  perl(ExtUtils::MakeMaker)
-Requires:       "`perl
-Requires:       $version))
-Requires:       -V:version`";
-Requires:       echo
-Requires:       perl(:MODULE_COMPAT_%(eval
+%define cpan_name XML-Parser
+Summary:        A perl module for parsing XML documents
+Version:        2.41
+Release:        9
+License:        GPL-1.0+ or Artistic-1.0
+Group:          Development/Libraries/Perl
+AutoReqProv:    on
+Url:            http://www.cpan.org/modules/by-module/XML/ 
+Source:         %{cpan_name}-%{version}.tar.gz
+Patch:          %{cpan_name}-2.40.diff
+BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+%{perl_requires}
+BuildRequires:  perl
+BuildRequires:  perl-macros
+BuildRequires:  libexpat-devel
 
 %description
-This module provides ways to parse XML documents. It is built on top
-of XML::Parser::Expat, which is a lower level interface to James
-Clark's expat library. Each call to one of the parsing methods creates
-a new instance of XML::Parser::Expat which is then used to parse the
-document. Expat options may be provided when the XML::Parser object is
-created. These options are then passed on to the Expat object on each
-parse call. They can also be given as extra arguments to the parse
-methods, in which case they override options given at XML::Parser
-creation time.
+This module provides ways to parse XML documents. It is built on top of
+ XML::Parser::Expat, which is a lower level interface to James Clark's expat
+ library. Each call to one of the parsing methods creates a new instance of
+ XML::Parser::Expat which is then used to parse the document. Expat options may
+ be provided when the XML::Parser object is created. These options are then
+ passed on to the Expat object on each parse call. They can also be given as
+ extra arguments to the parse methods, in which case they override options
+ given at XML::Parser creation time.
+
+The behavior of the parser is controlled either by "Style" and/or "Handlers"
+ options, or by "setHandlers" method. These all provide mechanisms for
+ XML::Parser to set the handlers needed by XML::Parser::Expat. If neither
+ Style nor Handlers are specified, then parsing just checks the document
+ for being well-formed.
+
+When underlying handlers get called, they receive as their first parameter
+ the Expat object, not the Parser object.
+
+You will find examples in
+/usr/share/doc/packages/perl-XML-Parser/samples.  For documentation
+read the XML::Parser and XML::Parser::Expat man pages.
+
+Authors:
+--------
+    Larry Wall <larry@wall.org>
+    Clark Cooper <coopercc@netheaven.com>
 
 %prep
-%setup -q -n XML-Parser-%{version}
-chmod 644 samples/{canonical,xml*}
-perl -pi -e 's|^#!/usr/local/bin/perl\b|#!perl|' samples/{canonical,xml*}
+%setup -n XML-Parser-%{version} -q
+%patch
 
 %build
-CFLAGS="%{optflags}" perl Makefile.PL INSTALLDIRS=vendor
-make %{?_smp_mflags} OPTIMIZE="%{optflags}"
+CFLAGS="$RPM_OPT_FLAGS" perl Makefile.PL
+%{__make}
 
 %check
-make test
+%{__make} test
 
 %install
-make pure_install PERL_INSTALL_ROOT=%{buildroot}
-find %{buildroot} -type f -name .packlist -exec rm -f {} ';'
-find %{buildroot} -type f -name '*.bs' -a -size 0 -exec rm -f {} ';'
-find %{buildroot} -type d -depth -exec rmdir {} 2>/dev/null ';'
-chmod -R u+w %{buildroot}/*
+%perl_make_install
+%perl_process_packlist
+%perl_gen_filelist
 
+%clean
+%{__rm} -rf $RPM_BUILD_ROOT
 
-%files
-%defattr(-,root,root,-)
-%{perl_vendorarch}/XML/*
-%{perl_vendorarch}/auto/XML/*
-%doc %{_mandir}/man3/*.3*
+%files -f %{name}.files
+%defattr(0644,root,root,0755)
+%doc Changes README samples
+
+%changelog
