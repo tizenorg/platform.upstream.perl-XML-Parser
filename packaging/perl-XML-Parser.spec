@@ -8,8 +8,6 @@ Group:          Development/Libraries/Perl
 AutoReqProv:    on
 Url:            http://www.cpan.org/modules/by-module/XML/ 
 Source:         %{cpan_name}-%{version}.tar.gz
-Patch:          %{cpan_name}-2.40.diff
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 %{perl_requires}
 BuildRequires:  perl
 BuildRequires:  perl-macros
