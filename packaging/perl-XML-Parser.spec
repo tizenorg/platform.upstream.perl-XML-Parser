@@ -43,7 +43,6 @@ Authors:
 
 %prep
 %setup -n XML-Parser-%{version} -q
-%patch
 
 %build
 CFLAGS="$RPM_OPT_FLAGS" perl Makefile.PL
