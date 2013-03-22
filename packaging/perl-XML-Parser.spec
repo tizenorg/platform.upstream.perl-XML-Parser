@@ -8,9 +8,7 @@ Group:          Development/Libraries/Perl
 AutoReqProv:    on
 Url:            http://www.cpan.org/modules/by-module/XML/ 
 Source:         %{cpan_name}-%{version}.tar.gz
-%{perl_requires}
 BuildRequires:  perl
-BuildRequires:  perl-macros
 BuildRequires:  libexpat-devel
 
 %description
@@ -36,10 +34,6 @@ You will find examples in
 /usr/share/doc/packages/perl-XML-Parser/samples.  For documentation
 read the XML::Parser and XML::Parser::Expat man pages.
 
-Authors:
---------
-    Larry Wall <larry@wall.org>
-    Clark Cooper <coopercc@netheaven.com>
 
 %prep
 %setup -n XML-Parser-%{version} -q
@@ -61,6 +55,5 @@ CFLAGS="$RPM_OPT_FLAGS" perl Makefile.PL
 
 %files -f %{name}.files
 %defattr(0644,root,root,0755)
-%doc Changes README samples
 
 %changelog
