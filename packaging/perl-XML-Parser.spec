@@ -8,6 +8,7 @@ Group:          Development/Libraries/Perl
 AutoReqProv:    on
 Url:            http://www.cpan.org/modules/by-module/XML/ 
 Source:         %{cpan_name}-%{version}.tar.gz
+Source1001: 	perl-XML-Parser.manifest
 BuildRequires:  perl
 BuildRequires:  libexpat-devel
 
@@ -37,6 +38,7 @@ read the XML::Parser and XML::Parser::Expat man pages.
 
 %prep
 %setup -n XML-Parser-%{version} -q
+cp %{SOURCE1001} .
 
 %build
 CFLAGS="$RPM_OPT_FLAGS" perl Makefile.PL
@@ -54,6 +56,7 @@ CFLAGS="$RPM_OPT_FLAGS" perl Makefile.PL
 %{__rm} -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.files
+%manifest %{name}.manifest
 %defattr(0644,root,root,0755)
 
 %changelog
