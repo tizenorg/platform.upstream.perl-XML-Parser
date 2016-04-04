@@ -41,6 +41,9 @@ read the XML::Parser and XML::Parser::Expat man pages.
 cp %{SOURCE1001} .
 
 %build
+export CFLAGS+=" -fvisibility=hidden"
+  export CXXFLAGS+=" -fvisibility=hidden"
+  
 CFLAGS="$RPM_OPT_FLAGS" perl Makefile.PL
 %{__make}
 
