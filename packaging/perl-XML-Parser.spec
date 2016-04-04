@@ -44,7 +44,7 @@ cp %{SOURCE1001} .
 export CFLAGS+=" -fvisibility=hidden"
   export CXXFLAGS+=" -fvisibility=hidden"
   
-CFLAGS="$RPM_OPT_FLAGS" perl Makefile.PL
+CFLAGS="$RPM_OPT_FLAGS -fvisibility=hidden" perl Makefile.PL
 %{__make}
 
 %check
